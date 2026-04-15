@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filter Kecerahan Wajah AI</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #container {
+            width: 320px;
+            height: 240px;
+            border: 5px solid #333;
+            border-radius: 10px;
+            background-color: #000;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none; /* Disembunyikan dulu */
+        }
+        img#placeholder-img, img#monkey-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block; /* Tampilan awal */
+        }
+        #btn-start, #btn-snap {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        #btn-snap {
+            display: none; /* Disembunyikan dulu */
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Scan Wajah Kamu</h2>
+    
+    <div id="container">
+        <img id="placeholder-img" src="https://via.placeholder.com/320x240.png?text=Klik+Mulai+di+Bawah" alt="Placeholder">
+        
+        <video id="webcam" autoplay playsinline></video>
+        
+        <img id="monkey-img" src="monyet.jpg" alt="Monyet" style="display:none;">
+    </div>
+
+    <button id="btn-start">Ketuk untuk Mulai Scan</button>
+    <button id="btn-snap">Ambil Foto</button>
+
+    <script>
+        const video = document.getElementById('webcam');
+        const placeholderImg = document.getElementById('placeholder-img');
+        const monkeyImg = document.getElementById('monkey-img');
+        const btnStart = document.getElementById('btn-start');
+        const btnSnap = document.getElementById('btn-snap');
+
+        // 1. Fungsi untuk memulai kamera
+        async function startCamera() {
+            try {
+                // Minta izin kamera (browser akan nampilkan pop-up izin sekarang)
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                video.srcObject = stream;
+                
+                // Ganti tampilan
+                placeholderImg.style.display = 'none';
+                video.style.display = 'block';
+                btnStart.style.display = 'none';
+                btnSnap.style.display = 'inline-block';
+            } catch (err) {
+                console.error("Gagal mengakses kamera: ", err);
+                alert("Waduh, izin kamera ditolak atau tidak didukung browser kamu.");
+            }
+        }
+
+        // 2. Fungsi untuk "mengambil foto" (Prank)
+        function takePhoto() {
+            // Sembunyikan kamera, tampilkan monyet
+            video.style.display = 'none';
+            monkeyImg.style.display = 'block';
+            btnSnap.style.display = 'none';
+            
+            // Tambahan (Opsional): Putar suara tawa keras atau suara monyet di sini
+        }
+
+        // Event Listener
+        btnStart.addEventListener('click', startCamera);
+        btnSnap.addEventListener('click', takePhoto);
+    </script>
+
+</body>
+</html>
